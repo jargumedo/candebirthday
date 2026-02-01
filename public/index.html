@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#f5ebe0">
+  <title>Feliz Cumpleaños Mi Amor</title>
+  <style>
+    /* ========================================
+       VARIABLES DE CONFIGURACIÓN
+       ======================================== */
+    :root {
+      /* Colores */
+      --color-cream: #f5ebe0;
+      --color-cream-light: #faf7f2;
+      --color-rose: #d4a5a5;
+      --color-rose-light: #e8c4c4;
+      --color-wine: #8b5a5a;
+      --color-wine-dark: #6b4444;
+      --color-text: #4a3f3f;
+      --color-text-light: #6b5f5f;
+      --color-white: #ffffff;
+      --color-overlay: rgba(0, 0, 0, 0.4);
+
+      /* Tipografía */
+      --font-main: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+      /* Espaciado */
+      --spacing-xs: 0.5rem;
+      --spacing-sm: 1rem;
+      --spacing-md: 1.5rem;
+      --spacing-lg: 2rem;
+      --spacing-xl: 3rem;
+
+      /* Bordes */
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-full: 50%;
+
+      /* Sombras */
+      --shadow-sm: 0 2px 8px rgba(139, 90, 90, 0.1);
+      --shadow-md: 0 4px 16px rgba(139, 90, 90, 0.15);
+      --shadow-lg: 0 8px 32px rgba(139, 90, 90, 0.2);
+    }
+
+    /* ========================================
+       RESET Y BASE
+       ======================================== */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--color-cream);
+      color: var(--color-text);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ========================================
+       PANTALLA DE BLOQUEO (PRE-CUMPLE)
+       ======================================== */
+    .locked-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: var(--spacing-lg);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .locked-screen.hidden {
+      opacity: 0;
+      transform: scale(1.05);
+      pointer-events: none;
+    }
+
+    .locked-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: var(--bg-image);
+      background-size: cover;
+      background-position: center;
+      filter: blur(2px);
+    }
+
+    .locked-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--color-overlay);
+    }
+
+    .locked-content {
+      position: relative;
+      z-index: 1;
+      color: var(--color-white);
+      max-width: 400px;
+    }
+
+    .locked-title {
+      font-size: clamp(1.75rem, 6vw, 2.5rem);
+      font-weight: 300;
+      letter-spacing: 0.02em;
+      margin-bottom: var(--spacing-lg);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .countdown {
+      display: flex;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .countdown-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: var(--spacing-sm) var(--spacing-md);
+      border-radius: var(--radius-md);
+      min-width: 70px;
+    }
+
+    .countdown-value {
+      font-size: clamp(1.5rem, 5vw, 2rem);
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .countdown-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.9;
+    }
+
+    .locked-hint {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      margin-bottom: var(--spacing-lg);
+      font-style: italic;
+    }
+
+    .btn-unlock {
+      background: var(--color-rose);
+      color: var(--color-white);
+      border: none;
+      padding: var(--spacing-sm) var(--spacing-lg);
+      font-size: 1rem;
+      font-weight: 500;
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-md);
+      min-width: 180px;
+    }
+
+    .btn-unlock:disabled {
+      background: rgba(255, 255, 255, 0.2);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .btn-unlock:not(:disabled):hover {
+      background: var(--color-wine);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn-unlock:not(:disabled):active {
+      transform: translateY(0);
+    }
+
+    /* ========================================
+       CONTENIDO PRINCIPAL (POST-CUMPLE)
+       ======================================== */
+    .main-content {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.8s ease 0.3s;
+    }
+
+    .main-content.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      padding: var(--spacing-xl) var(--spacing-lg);
+      background: linear-gradient(180deg, var(--color-cream-light) 0%, var(--color-cream) 100%);
+    }
+
+    .header-title {
+      font-size: clamp(1.75rem, 6vw, 2.5rem);
+      font-weight: 300;
+      color: var(--color-wine);
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .header-subtitle {
+      font-size: 1rem;
+      color: var(--color-text-light);
+      font-style: italic;
+    }
+
+    .heart-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      margin: var(--spacing-md) 0;
+      color: var(--color-rose);
+    }
+
+    .heart-divider::before,
+    .heart-divider::after {
+      content: '';
+      width: 60px;
+      height: 1px;
+      background: var(--color-rose-light);
+    }
+
+    .heart-icon {
+      font-size: 0.75rem;
+    }
+
+    /* Secciones */
+    section {
+      padding: var(--spacing-lg);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: var(--color-wine);
+      text-align: center;
+      margin-bottom: var(--spacing-md);
+    }
+
+    /* ========================================
+       GALERÍA DE FOTOS
+       ======================================== */
+    .gallery-section {
+      background: var(--color-cream-light);
+      padding-top: var(--spacing-xl);
+      padding-bottom: var(--spacing-xl);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-sm);
+    }
+
+    @media (min-width: 480px) {
+      .gallery-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .gallery-item {
+      aspect-ratio: 1;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background: var(--color-rose-light);
+      position: relative;
+    }
+
+    .gallery-item:hover {
+      transform: scale(1.03);
+      box-shadow: var(--shadow-md);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.05);
+    }
+
+    .gallery-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-wine);
+      font-size: 2rem;
+      opacity: 0.5;
+    }
+
+    .gallery-caption {
+      text-align: center;
+      margin-top: var(--spacing-md);
+      color: var(--color-text-light);
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+
+    /* Modal de galería */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease;
+      padding: var(--spacing-lg);
+    }
+
+    .modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content {
+      max-width: 90%;
+      max-height: 80vh;
+      border-radius: var(--radius-md);
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+    }
+
+    .modal.active .modal-content {
+      transform: scale(1);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: var(--spacing-lg);
+      right: var(--spacing-lg);
+      background: var(--color-white);
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-full);
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease;
+    }
+
+    .modal-close:hover {
+      transform: scale(1.1);
+    }
+
+    /* ========================================
+       SECCIÓN DE VALES
+       ======================================== */
+    .vales-section {
+      padding-top: var(--spacing-xl);
+      padding-bottom: var(--spacing-xl);
+    }
+
+    .vale-card {
+      background: var(--color-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: var(--spacing-md);
+      overflow: hidden;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .vale-card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    .vale-hidden {
+      padding: var(--spacing-lg);
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .vale-hint {
+      color: var(--color-text-light);
+      font-style: italic;
+      margin-bottom: var(--spacing-sm);
+      font-size: 0.95rem;
+    }
+
+    .vale-reveal-prompt {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      color: var(--color-rose);
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .vale-reveal-prompt::after {
+      content: '→';
+      transition: transform 0.2s ease;
+    }
+
+    .vale-hidden:hover .vale-reveal-prompt::after {
+      transform: translateX(4px);
+    }
+
+    .vale-revealed {
+      display: none;
+      padding: var(--spacing-lg);
+      animation: fadeIn 0.5s ease;
+    }
+
+    .vale-card.revealed .vale-hidden {
+      display: none;
+    }
+
+    .vale-card.revealed .vale-revealed {
+      display: block;
+    }
+
+    .vale-icon {
+      font-size: 2.5rem;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .vale-title {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--color-wine);
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .vale-description {
+      color: var(--color-text-light);
+      font-size: 0.9rem;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .vale-btn {
+      background: var(--color-rose);
+      color: var(--color-white);
+      border: none;
+      padding: var(--spacing-xs) var(--spacing-md);
+      font-size: 0.9rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .vale-btn:hover {
+      background: var(--color-wine);
+    }
+
+    .vale-details {
+      display: none;
+      margin-top: var(--spacing-md);
+      padding: var(--spacing-md);
+      background: var(--color-cream-light);
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+    }
+
+    .vale-details.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .vale-options {
+      display: none;
+      margin-top: var(--spacing-md);
+      gap: var(--spacing-sm);
+    }
+
+    .vale-options.active {
+      display: flex;
+      flex-direction: column;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .vale-option {
+      background: var(--color-cream-light);
+      border: 2px solid var(--color-rose-light);
+      padding: var(--spacing-sm);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .vale-option:hover {
+      border-color: var(--color-rose);
+      background: var(--color-white);
+    }
+
+    .vale-option.selected {
+      border-color: var(--color-wine);
+      background: var(--color-rose-light);
+    }
+
+    /* ========================================
+       FOOTER
+       ======================================== */
+    .footer {
+      text-align: center;
+      padding: var(--spacing-xl) var(--spacing-lg);
+      background: var(--color-cream-light);
+    }
+
+    .footer-text {
+      color: var(--color-text-light);
+      font-size: 0.9rem;
+    }
+
+    .footer-heart {
+      color: var(--color-rose);
+      display: inline-block;
+      animation: pulse 1.5s ease infinite;
+    }
+
+    /* ========================================
+       ANIMACIONES
+       ======================================== */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.1);
+      }
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ========================================
+       UTILIDADES
+       ======================================== */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ========================================
+       PANTALLA DE BLOQUEO
+       ======================================== -->
+  <div class="locked-screen" id="lockedScreen">
+    <div class="locked-bg" id="lockedBg"></div>
+    <div class="locked-overlay"></div>
+    <div class="locked-content">
+      <h1 class="locked-title">Feliz cumpleaños mi amor</h1>
+
+      <div class="countdown" id="countdown" aria-live="polite">
+        <div class="countdown-item">
+          <span class="countdown-value" id="days">00</span>
+          <span class="countdown-label">Días</span>
+        </div>
+        <div class="countdown-item">
+          <span class="countdown-value" id="hours">00</span>
+          <span class="countdown-label">Horas</span>
+        </div>
+        <div class="countdown-item">
+          <span class="countdown-value" id="minutes">00</span>
+          <span class="countdown-label">Min</span>
+        </div>
+        <div class="countdown-item">
+          <span class="countdown-value" id="seconds">00</span>
+          <span class="countdown-label">Seg</span>
+        </div>
+      </div>
+
+      <p class="locked-hint" id="lockedHint">Falta poquito…</p>
+
+      <button class="btn-unlock" id="btnUnlock" disabled aria-label="Abrir regalo">
+        Abrir regalo
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================
+       CONTENIDO PRINCIPAL
+       ======================================== -->
+  <main class="main-content" id="mainContent">
+    <!-- Header -->
+    <header class="header">
+      <h1 class="header-title">Feliz cumpleaños mi amor ❤️</h1>
+      <p class="header-subtitle">Esto recién empieza…</p>
+      <div class="heart-divider">
+        <span class="heart-icon">♥</span>
+      </div>
+    </header>
+
+    <!-- Galería de fotos -->
+    <section class="gallery-section">
+      <h2 class="section-title fade-in">Nuestros momentos</h2>
+      <div class="gallery-grid" id="galleryGrid">
+        <!-- Las fotos se generan dinámicamente -->
+      </div>
+      <p class="gallery-caption fade-in">Nuestros momentos</p>
+    </section>
+
+    <!-- Sección de Vales -->
+    <section class="vales-section">
+      <h2 class="section-title fade-in">Tus vales</h2>
+
+      <!-- Vale #1: Atlético de Madrid -->
+      <article class="vale-card fade-in" id="vale1">
+        <div class="vale-hidden" onclick="revealVale('vale1')" role="button" tabindex="0"
+          aria-label="Toca para revelar el vale">
+          <p class="vale-hint">"Una noche con emoción, gritos y abrazos…"</p>
+          <span class="vale-reveal-prompt">Toca para revelar</span>
+        </div>
+        <div class="vale-revealed">
+          <div class="vale-icon">⚽</div>
+          <h3 class="vale-title">Noche de estadio: Atlético de Madrid</h3>
+          <p class="vale-description">Una experiencia inolvidable juntos en el estadio</p>
+          <button class="vale-btn" onclick="toggleDetails('details1')">Ver detalles</button>
+          <div class="vale-details" id="details1">
+            <p><strong>Partido del Atlético de Madrid</strong></p>
+            <p>Entrada confirmada ✓</p>
+            <p style="margin-top: var(--spacing-xs); color: var(--color-text-light);">
+              Fecha: <em>Sin confirmar todavia</em>
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <!-- Vale #2: Cena romántica -->
+      <article class="vale-card fade-in" id="vale2">
+        <div class="vale-hidden" onclick="revealVale('vale2')" role="button" tabindex="0"
+          aria-label="Toca para revelar el vale">
+          <p class="vale-hint">"Una noche solo para nosotros…"</p>
+          <span class="vale-reveal-prompt">Toca para revelar</span>
+        </div>
+        <div class="vale-revealed">
+          <div class="vale-icon">🍷</div>
+          <h3 class="vale-title">Cena romántica a elección</h3>
+          <p class="vale-description">Vale por una cena romántica a elección (cumpleaños o Benidorm)</p>
+          <button class="vale-btn" onclick="toggleOptions('options2')">Elegir momento</button>
+          <div class="vale-options" id="options2">
+            <button class="vale-option" onclick="selectOption(this, 'options2')">En tu cumple</button>
+            <button class="vale-option" onclick="selectOption(this, 'options2')">En Benidorm</button>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p class="footer-text">
+        Hecho con <span class="footer-heart">♥</span> para vos
+      </p>
+    </footer>
+  </main>
+
+  <!-- Modal para galería -->
+  <div class="modal" id="galleryModal" onclick="closeModal()">
+    <button class="modal-close" aria-label="Cerrar">&times;</button>
+    <img class="modal-content" id="modalImage" src="" alt="Foto ampliada">
+  </div>
+
+  <script>
+    /* ========================================
+       CONFIGURACIÓN - EDITAR AQUÍ
+       ======================================== */
+
+    // Fecha objetivo (Argentina, Mendoza timezone: UTC-3)
+    const targetDate = new Date("2026-02-02T00:00:00-03:00");
+
+    // Imagen de fondo de la pantalla de bloqueo
+    const backgroundImage = "assets/bg.jpg";
+
+    // Imágenes de la galería (placeholders)
+    const galleryImages = [
+      "assets/1.jpg",
+      "assets/2.jpg",
+      "assets/3.jpg",
+      "assets/4.jpg",
+      "assets/5.jpg",
+      "assets/6.jpg",
+      "assets/7.jpg",
+      "assets/8.jpg"
+    ];
+
+    /* ========================================
+       ELEMENTOS DEL DOM
+       ======================================== */
+    const lockedScreen = document.getElementById('lockedScreen');
+    const mainContent = document.getElementById('mainContent');
+    const btnUnlock = document.getElementById('btnUnlock');
+    const lockedHint = document.getElementById('lockedHint');
+    const lockedBg = document.getElementById('lockedBg');
+    const galleryGrid = document.getElementById('galleryGrid');
+    const galleryModal = document.getElementById('galleryModal');
+    const modalImage = document.getElementById('modalImage');
+
+    // Elementos del countdown
+    const daysEl = document.getElementById('days');
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
+
+    /* ========================================
+       INICIALIZACIÓN
+       ======================================== */
+    function init() {
+      // Establecer imagen de fondo
+      lockedBg.style.setProperty('--bg-image', `url('${backgroundImage}')`);
+      lockedBg.style.backgroundImage = `url('${backgroundImage}')`;
+
+      // Generar galería
+      generateGallery();
+
+      // Iniciar countdown
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+
+      // Configurar evento de desbloqueo
+      btnUnlock.addEventListener('click', unlockContent);
+
+      // Configurar observador de scroll para animaciones
+      setupScrollAnimations();
+
+      // Manejar teclas para vales
+      document.querySelectorAll('.vale-hidden').forEach(el => {
+        el.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            el.click();
+          }
+        });
+      });
+    }
+
+    /* ========================================
+       COUNTDOWN
+       ======================================== */
+    function updateCountdown() {
+      const now = new Date();
+      const diff = targetDate - now;
+
+      if (diff <= 0) {
+        // ¡Ya es la fecha!
+        daysEl.textContent = '00';
+        hoursEl.textContent = '00';
+        minutesEl.textContent = '00';
+        secondsEl.textContent = '00';
+        lockedHint.textContent = '¡Es hora de abrir tu regalo!';
+        btnUnlock.disabled = false;
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      daysEl.textContent = String(days).padStart(2, '0');
+      hoursEl.textContent = String(hours).padStart(2, '0');
+      minutesEl.textContent = String(minutes).padStart(2, '0');
+      secondsEl.textContent = String(seconds).padStart(2, '0');
+    }
+
+    /* ========================================
+       DESBLOQUEO
+       ======================================== */
+    function unlockContent() {
+      lockedScreen.classList.add('hidden');
+      mainContent.classList.add('visible');
+      document.body.style.overflow = 'auto';
+
+      // Trigger de animaciones de fade-in
+      setTimeout(() => {
+        document.querySelectorAll('.fade-in').forEach((el, i) => {
+          setTimeout(() => el.classList.add('visible'), i * 100);
+        });
+      }, 500);
+    }
+
+    /* ========================================
+       GALERÍA
+       ======================================== */
+    function generateGallery() {
+      galleryGrid.innerHTML = '';
+
+      galleryImages.forEach((src, index) => {
+        const item = document.createElement('div');
+        item.className = 'gallery-item fade-in';
+        item.onclick = () => openModal(src);
+        item.setAttribute('role', 'button');
+        item.setAttribute('tabindex', '0');
+        item.setAttribute('aria-label', `Ver foto ${index + 1}`);
+
+        // Crear imagen con fallback a placeholder
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = `Momento ${index + 1}`;
+        img.onerror = function () {
+          // Si la imagen no carga, mostrar placeholder
+          this.style.display = 'none';
+          const placeholder = document.createElement('div');
+          placeholder.className = 'gallery-placeholder';
+          placeholder.textContent = '♥';
+          item.appendChild(placeholder);
+        };
+
+        item.appendChild(img);
+
+        // Permitir abrir con teclado
+        item.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openModal(src);
+          }
+        });
+
+        galleryGrid.appendChild(item);
+      });
+    }
+
+    function openModal(src) {
+      modalImage.src = src;
+      galleryModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      galleryModal.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Cerrar modal con Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && galleryModal.classList.contains('active')) {
+        closeModal();
+      }
+    });
+
+    /* ========================================
+       VALES
+       ======================================== */
+    function revealVale(valeId) {
+      const vale = document.getElementById(valeId);
+      vale.classList.add('revealed');
+    }
+
+    function toggleDetails(detailsId) {
+      const details = document.getElementById(detailsId);
+      details.classList.toggle('active');
+    }
+
+    function toggleOptions(optionsId) {
+      const options = document.getElementById(optionsId);
+      options.classList.toggle('active');
+    }
+
+    function selectOption(button, optionsId) {
+      const options = document.getElementById(optionsId);
+      options.querySelectorAll('.vale-option').forEach(opt => {
+        opt.classList.remove('selected');
+      });
+      button.classList.add('selected');
+    }
+
+    /* ========================================
+       ANIMACIONES DE SCROLL
+       ======================================== */
+    function setupScrollAnimations() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      });
+
+      document.querySelectorAll('.fade-in').forEach(el => {
+        observer.observe(el);
+      });
+    }
+
+    /* ========================================
+       INICIAR
+       ======================================== */
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+
+</html>
