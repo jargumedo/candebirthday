@@ -5,7 +5,7 @@ import { useState, useEffect, useCallback } from "react"
 // ========================================
 // CONFIGURACIÓN - EDITAR AQUÍ
 // ========================================
-const TARGET_DATE = new Date("2026-02-01T00:00:00-03:00")
+const TARGET_DATE = new Date("2026-02-02T00:00:00-03:00")
 const BACKGROUND_IMAGE = "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=1200&q=80"
 
 // Galería con frases personalizables - EDITAR LAS FRASES AQUÍ
